@@ -1,0 +1,11 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 8123
+  servlet:
+    context-path: /api
+
+openapi:
+  client:
+    access-key: yupi
+    secret-key: abcdefgh
+
