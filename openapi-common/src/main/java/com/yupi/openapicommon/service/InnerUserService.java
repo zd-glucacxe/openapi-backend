@@ -1,7 +1,6 @@
 package com.yupi.openapicommon.service;
 
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.yupi.openapicommon.model.entity.User;
 
 
@@ -10,14 +9,13 @@ import com.yupi.openapicommon.model.entity.User;
  *
  * @author yupi
  */
-public interface InnerUserService extends IService<User> {
+public interface InnerUserService {
 
     /**
-     * 数据库是否已分配给用户密钥    User (accessKey、secretKey)
+     * 数据库是否已分配给用户密钥    User (accessKey)
      * @param accessKey
-     * @param secretKey
      * @return User
      */
-    User getinvokeUser(String accessKey, String secretKey);
+    User getinvokeUser(String accessKey);
 
 }

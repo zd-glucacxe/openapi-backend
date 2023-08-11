@@ -2,7 +2,13 @@ package com.yupi.openapigateway;
 
 
 import com.yupi.openapiclientsdk.utils.SignUtil;
+import com.yupi.openapicommon.model.entity.InterfaceInfo;
+import com.yupi.openapicommon.model.entity.User;
+import com.yupi.openapicommon.service.InnerInterfaceInfoService;
+import com.yupi.openapicommon.service.InnerUserInterfaceInfoService;
+import com.yupi.openapicommon.service.InnerUserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.reactivestreams.Publisher;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -11,7 +17,9 @@ import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.RequestPath;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.http.server.reactive.ServerHttpResponseDecorator;
@@ -30,6 +38,17 @@ import java.util.List;
 public class CustomGlobalFilter implements GlobalFilter, Ordered {
         private static final List<String> IP_WHITE_LIST = Arrays.asList("127.0.0.1");
 
+        private static final String INTERFACE_HOST = "http://localhost:8123";
+
+        @DubboReference
+        private InnerInterfaceInfoService innerInterfaceInfoService;
+
+        @DubboReference
+        private InnerUserService innerUserService;
+
+        @DubboReference
+        private InnerUserInterfaceInfoService innerUserInterfaceInfoService;
+
     /**
      * 全局过滤
      */
@@ -39,9 +58,13 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
 
         //1. 记录请求日志
         ServerHttpRequest request = exchange.getRequest();
+        String path = INTERFACE_HOST + request.getPath().value();
+        String method = request.getMethod().toString();
+
+
         log.info("请求唯一标识：" + request.getId());
-        log.info("请求路径：" + request.getPath().value());
-        log.info("请求方法：" + request.getMethod());
+        log.info("请求路径：" + path);
+        log.info("请求方法：" + method);
         log.info("请求参数：" + request.getQueryParams());
         String sourceAddress = request.getLocalAddress().getHostString();
         log.info("请求来源地址1：" + request.getLocalAddress().getHostString());
@@ -60,16 +83,27 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         String timestamp = headers.getFirst("timestamp");
         String sign = headers.getFirst("sign");
 
-        // TODO 实际情况是要去数据库中查是否已分配给用户
-        if (!"yupi".equals(accessKey)) {
+        // 实际情况是要去数据库中查是否已分配给用户
+        User invokeUser = null;
+        try {
+            invokeUser = innerUserService.getinvokeUser(accessKey);
+        } catch (Exception e) {
+            log.error("getinvokeUser error", e);
+        }
+        if (invokeUser == null) {
             return handleNoAuth(response);
         }
+
+
+//        if (!"yupi".equals(accessKey)) {
+//            return handleNoAuth(response);
+//        }
 
         if(Long.parseLong(nonce) > 10000L) {
             return handleNoAuth(response);
         }
 
-        //TODO 时间戳和当前时间不能超过5分钟
+        // 时间戳和当前时间不能超过5分钟
         Long currentTime = System.currentTimeMillis() / 1000;
         final Long FIVE_MINUTES = 60 * 5L;
         if ((currentTime - Long.parseLong(timestamp)) >= FIVE_MINUTES) {
@@ -77,23 +111,45 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         }
 
 
-        //TODO 实际情况是从数据库中拿到 secretKey，可以通过accessKey去查
-        String serverSign = SignUtil.genSign(body, "abcdefgh");
+        // 实际情况是从数据库中拿到 secretKey，可以通过accessKey去查
+        String secretKey = invokeUser.getSecretKey();
+        String serverSign = SignUtil.genSign(body, secretKey);
 
-        if (!sign.equals(serverSign)) {
+        if (sign == null || !sign.equals(serverSign)) {
             return handleNoAuth(response);
         }
 
 
         //4. 请求的模拟接口是否存在？
-        //todo 从数据库中查询模拟接口是否存在，以及请求方法是否匹配(还可以检验请求参数）
+        // 从数据库中查询模拟接口是否存在，以及请求方法是否匹配(还可以检验请求参数）
+        InterfaceInfo interfaceInfo = null;
+        try {
+            interfaceInfo = innerInterfaceInfoService.getInterfaceInfo(path, method);
+        } catch (Exception e) {
+            log.error("getInterfaceInfo error", e);
+        }
 
-        //5. 请求转发，调用模拟接口
+        if (interfaceInfo == null) {
+            return handleNoAuth(response);
+        }
+
+
+        //. 请求转发，调用模拟接口  (响应日志内部完成了)
 //        Mono<Void> filter = chain.filter(exchange);
-        //6. 响应日志
-        return handleResponse(exchange, chain);
+
+        //5. 响应日志
+        return handleResponse(exchange, chain, interfaceInfo.getId(), invokeUser.getId());
 
     }
+
+
+
+
+
+
+
+
+
 
 
     /**
@@ -102,7 +158,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
      * @param chain
      * @return
      */
-    public Mono<Void> handleResponse (ServerWebExchange exchange, GatewayFilterChain chain) {
+    public Mono<Void> handleResponse (ServerWebExchange exchange, GatewayFilterChain chain, long interfaceInfoId, long userId) {
         try {
             ServerHttpResponse originalResponse = exchange.getResponse();
             // 缓冲区工厂 缓存数据
@@ -130,7 +186,12 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
                             return super.writeWith(
 
                                 fluxBody.map(dataBuffer -> {
-                                    //7. todo 调用成功，接口调用次数 +1  invokeCount()
+                                    //7.  调用成功，接口调用次数 +1  invokeCount()
+                                    try {
+                                        innerUserInterfaceInfoService.invokeCount(interfaceInfoId, userId);
+                                    } catch (Exception e) {
+                                        log.error("invokeCount error", e);
+                                    }
                                     byte[] content = new byte[dataBuffer.readableByteCount()];
                                     dataBuffer.read(content);
                                     DataBufferUtils.release(dataBuffer);//释放掉内存

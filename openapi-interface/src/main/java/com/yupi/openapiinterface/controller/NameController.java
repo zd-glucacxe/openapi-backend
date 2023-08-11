@@ -3,7 +3,6 @@ package com.yupi.openapiinterface.controller;
 
 
 import com.yupi.openapiclientsdk.model.User;
-import com.yupi.openapiclientsdk.utils.SignUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,29 +31,29 @@ public class NameController {
 
     @PostMapping("/user")
     public String getUsernameByPost(@RequestBody User user, HttpServletRequest request) {
-        String accessKey = request.getHeader("accessKey");
-        String nonce = request.getHeader("nonce");
-        String body = request.getHeader("body");
-        String timestamp = request.getHeader("timestamp");
-        String sign = request.getHeader("sign");
-
-          // TODO 实际情况是要去数据库中查是否已分配给用户
-          if (!accessKey.equals("yupi")) {
-            throw new RuntimeException("无权限！");
-          }
-
-          if(Long.parseLong(nonce) > 10000) {
-              throw new RuntimeException("无权限！");
-          }
-
-          //TODO 时间戳和当前时间不能超过5分钟
-
-          //TODO 实际情况是从数据库中拿到 secretKey，可以通过accessKey去查
-          String serverSign = SignUtil.genSign(body, "abcdefgh");
-
-        if (!sign.equals(serverSign)) {
-            throw new RuntimeException("无权限！");
-        }
+//        String accessKey = request.getHeader("accessKey");
+//        String nonce = request.getHeader("nonce");
+//        String body = request.getHeader("body");
+//        String timestamp = request.getHeader("timestamp");
+//        String sign = request.getHeader("sign");
+//
+//          // TODO 实际情况是要去数据库中查是否已分配给用户
+//          if (!accessKey.equals("yupi")) {
+//             throw new RuntimeException("无权限！");
+//          }
+//
+//          if(Long.parseLong(nonce) > 10000) {
+//              throw new RuntimeException("无权限！");
+//          }
+//
+//          //TODO 时间戳和当前时间不能超过5分钟
+//
+//          //TODO 实际情况是从数据库中拿到 secretKey，可以通过accessKey去查
+//          String serverSign = SignUtil.genSign(body, "abcdefgh");
+//
+//        if (!sign.equals(serverSign)) {
+//            throw new RuntimeException("无权限！");
+//        }
 
         String result = "POST 用户名是" + user.getUsername();
 

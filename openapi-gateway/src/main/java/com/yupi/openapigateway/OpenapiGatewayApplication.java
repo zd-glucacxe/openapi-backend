@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @SpringBootApplication(exclude = {
         DataSourceAutoConfiguration.class,
         DataSourceTransactionManagerAutoConfiguration.class,
-        HibernateJpaAutoConfiguration.class})
+        HibernateJpaAutoConfiguration.class})  // 忽略数据库
 @EnableDubbo
 @Service
 public class OpenapiGatewayApplication {
