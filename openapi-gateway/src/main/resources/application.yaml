@@ -1,0 +1,63 @@
+server:
+  port: 8090
+
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - AddResponseHeader=source, yupi
+      routes:
+        - id: api_route
+          uri: http://localhost:8123
+          predicates:
+            - Path=/api/**
+dubbo:
+  application:
+    name: dubbo-springboot-demo-provider
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    id: nacos-registry
+    address: nacos://localhost:8848
+
+#      routes:
+#      - id: add_request_header_route
+#        uri: http://localhost:8123
+#        predicates:
+#          - Path=/api/**
+#        filters:
+#          - AddRequestHeader=yupi, swag
+#          - AddRequestParameter=name, dog
+#          - name: CircuitBreaker   # 过滤器的类型
+#            args:
+#              name: myCircuitBreaker
+#              fallbackUri: forward:/fallback
+#      - id: open-fallback
+#        uri: http://www.baidu.com
+#        predicates:
+#          - Path=/fallback
+
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: trace
+
+#        - id: path_route
+#          uri: https://yupi.icu
+#          predicates:
+#            - Path=/api/**
+#        - id: path_route2
+#          uri: https://apple.com
+#          predicates:
+#            - Path=/apple/**
+#        - id: after_route
+#          uri: https://baidu.com
+#          predicates:
+#            - After=2017-01-20T17:42:47.789-07:00[America/Denver]
+#        - id: before_route
+#            uri: https://baidu.com
+#            predicates:
+#              - Before=2024-01-20T17:42:47.789-07:00[America/Denver]

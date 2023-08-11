@@ -39,3 +39,19 @@ insert into openapi.`interface_info` (`name`, `description`, `url`, `requestHead
 insert into openapi.`interface_info` (`name`, `description`, `url`, `requestHeader`, `responseHeader`, `status`, `method`, `userId`) values ('陶鸿涛', '魏靖琪', 'www.donya-schuster.co', '孔浩', '唐泽洋', 0, '罗擎宇', 56032036);
 insert into openapi.`interface_info` (`name`, `description`, `url`, `requestHeader`, `responseHeader`, `status`, `method`, `userId`) values ('唐文', '曾楷瑞', 'www.nora-gleichner.co', '何雨泽', '梁子轩', 0, '姚航', 2298710241);
 insert into openapi.`interface_info` (`name`, `description`, `url`, `requestHeader`, `responseHeader`, `status`, `method`, `userId`) values ('万昊强', '陶明', 'www.shelli-witting.io', '赵擎苍', '林潇然', 0, '顾健雄', 30889218);
+
+
+-- 用户调用接口关系表
+create table if not exists openapi.`user_interface_info`
+(
+    `id` bigint not null auto_increment comment '主键' primary key,
+    `userId` bigint not null comment '调用用户id ',
+    `interfaceInfo` bigint not null comment '接口id ',
+    `totalNum` int default 0  not null comment '总调用次数',
+    `leftNum` int default 0  not null comment '剩余调用次数',
+    `status` int default 0  not null comment '0-正常，1-禁用',
+    `createTime` datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    `updateTime` datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    `isDelete` tinyint default 0 not null comment '是否删除(0-未删, 1-已删)'
+) comment '接口信息';
+
