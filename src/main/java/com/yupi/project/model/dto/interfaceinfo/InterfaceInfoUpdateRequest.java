@@ -1,28 +1,24 @@
-package com.yupi.project.model.dto.interfaceInfo;
+package com.yupi.project.model.dto.interfaceinfo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.yupi.project.common.PageRequest;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
 /**
- * 查询请求
+ * 更新请求
  *
- * @author yupi
+ * @TableName product
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class InterfaceInfoQueryRequest extends PageRequest implements Serializable {
+public class InterfaceInfoUpdateRequest implements Serializable {
+
     /**
      * 主键
      */
     private Long id;
 
     /**
-     * 接口名称
+     * 名称
      */
     private String name;
 
@@ -37,6 +33,11 @@ public class InterfaceInfoQueryRequest extends PageRequest implements Serializab
     private String url;
 
     /**
+     * 请求参数
+     */
+    private String requestParams;
+
+    /**
      * 请求头
      */
     private String requestHeader;
@@ -47,7 +48,7 @@ public class InterfaceInfoQueryRequest extends PageRequest implements Serializab
     private String responseHeader;
 
     /**
-     * 接口状态（0-关闭 1-开启）
+     * 接口状态（0-关闭，1-开启）
      */
     private Integer status;
 
@@ -56,9 +57,5 @@ public class InterfaceInfoQueryRequest extends PageRequest implements Serializab
      */
     private String method;
 
-    /**
-     * 创建人
-     */
-    private Long userId;
-
+    private static final long serialVersionUID = 1L;
 }

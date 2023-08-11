@@ -1,4 +1,4 @@
-package com.yupi.project.model.dto.interfaceInfo;
+package com.yupi.project.model.dto.interfaceinfo;
 
 import lombok.Data;
 
@@ -22,4 +22,5 @@ public class InterfaceInfoInvokeRequest implements Serializable {
      */
     private String userRequestParams;
 
+    private static final long serialVersionUID = 1L;
 }

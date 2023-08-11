@@ -1,5 +1,6 @@
 package com.yupi.openapiinterface;
 
+
 import com.yupi.openapiclientsdk.client.OpenAPIClient;
 import com.yupi.openapiclientsdk.model.User;
 import org.junit.jupiter.api.Test;

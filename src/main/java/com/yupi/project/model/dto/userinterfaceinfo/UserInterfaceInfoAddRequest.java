@@ -1,4 +1,4 @@
-package com.yupi.project.model.dto.userInterfaceInfo;
+package com.yupi.project.model.dto.userinterfaceinfo;
 
 import lombok.Data;
 
@@ -13,12 +13,12 @@ import java.io.Serializable;
 public class UserInterfaceInfoAddRequest implements Serializable {
 
     /**
-     * 调用用户id
+     * 调用用户 id
      */
     private Long userId;
 
     /**
-     * 接口id
+     * 接口 id
      */
     private Long interfaceInfoId;
 
@@ -31,6 +31,5 @@ public class UserInterfaceInfoAddRequest implements Serializable {
      * 剩余调用次数
      */
     private Integer leftNum;
-
 
 }

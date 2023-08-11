@@ -1,4 +1,4 @@
-package com.yupi.project.model.dto.interfaceInfo;
+package com.yupi.project.model.dto.interfaceinfo;
 
 import lombok.Data;
 
@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class InterfaceInfoAddRequest implements Serializable {
 
     /**
-     * 接口名称
+     * 名称
      */
     private String name;
 
@@ -41,7 +41,6 @@ public class InterfaceInfoAddRequest implements Serializable {
      * 响应头
      */
     private String responseHeader;
-
 
     /**
      * 请求类型

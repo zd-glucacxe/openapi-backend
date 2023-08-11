@@ -20,7 +20,7 @@ public class InterfaceInfo implements Serializable {
     private Long id;
 
     /**
-     * 接口名称
+     * 名称
      */
     private String name;
 
@@ -36,6 +36,9 @@ public class InterfaceInfo implements Serializable {
 
     /**
      * 请求参数
+     * [
+     *   {"name": "username", "type": "string"}
+     * ]
      */
     private String requestParams;
 
@@ -50,7 +53,7 @@ public class InterfaceInfo implements Serializable {
     private String responseHeader;
 
     /**
-     * 接口状态（0-关闭 1-开启）
+     * 接口状态（0-关闭，1-开启）
      */
     private Integer status;
 
@@ -60,7 +63,7 @@ public class InterfaceInfo implements Serializable {
     private String method;
 
     /**
-     * 创建人 
+     * 创建人
      */
     private Long userId;
 

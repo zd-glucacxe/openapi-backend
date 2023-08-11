@@ -1,6 +1,6 @@
 package com.yupi.openapigateway;
 
-import com.yupi.openapiclientsdk.utils.SignUtil;
+import com.yupi.openAPIClientsdk.utils.SignUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;

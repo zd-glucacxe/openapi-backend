@@ -1,4 +1,4 @@
-package com.yupi.project.model.dto.userInterfaceInfo;
+package com.yupi.project.model.dto.userinterfaceinfo;
 
 import lombok.Data;
 
@@ -11,6 +11,7 @@ import java.io.Serializable;
  */
 @Data
 public class UserInterfaceInfoUpdateRequest implements Serializable {
+
     /**
      * 主键
      */
@@ -32,5 +33,4 @@ public class UserInterfaceInfoUpdateRequest implements Serializable {
     private Integer status;
 
     private static final long serialVersionUID = 1L;
-
 }

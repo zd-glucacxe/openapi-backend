@@ -39,6 +39,7 @@ insert into openapi.`interface_info` (`name`, `description`, `url`, `requestHead
 insert into openapi.`interface_info` (`name`, `description`, `url`, `requestHeader`, `responseHeader`, `status`, `method`, `userId`) values ('陶鸿涛', '魏靖琪', 'www.donya-schuster.co', '孔浩', '唐泽洋', 0, '罗擎宇', 56032036);
 insert into openapi.`interface_info` (`name`, `description`, `url`, `requestHeader`, `responseHeader`, `status`, `method`, `userId`) values ('唐文', '曾楷瑞', 'www.nora-gleichner.co', '何雨泽', '梁子轩', 0, '姚航', 2298710241);
 insert into openapi.`interface_info` (`name`, `description`, `url`, `requestHeader`, `responseHeader`, `status`, `method`, `userId`) values ('万昊强', '陶明', 'www.shelli-witting.io', '赵擎苍', '林潇然', 0, '顾健雄', 30889218);
+insert into openapi.`interface_info` (`name`, `description`, `url`, `requestHeader`, `responseHeader`, `status`, `method`, `userId`) values ('万昊强1', '陶明', 'www.shelli-witting.io', '赵擎苍', '林潇然', 0, '顾健雄', 30889218);
 
 
 -- 用户调用接口关系表

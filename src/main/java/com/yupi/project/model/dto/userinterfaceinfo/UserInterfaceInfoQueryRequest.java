@@ -1,4 +1,4 @@
-package com.yupi.project.model.dto.userInterfaceInfo;
+package com.yupi.project.model.dto.userinterfaceinfo;
 
 import com.yupi.project.common.PageRequest;
 import lombok.Data;
@@ -14,19 +14,18 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class UserInterfaceInfoQueryRequest extends PageRequest implements Serializable {
-
     /**
      * 主键
      */
-     private Long id;
+    private Long id;
 
     /**
-     * 调用用户id
+     * 调用用户 id
      */
     private Long userId;
 
     /**
-     * 接口id
+     * 接口 id
      */
     private Long interfaceInfoId;
 

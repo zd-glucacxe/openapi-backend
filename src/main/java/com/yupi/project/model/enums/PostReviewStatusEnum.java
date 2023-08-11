@@ -1,4 +1,4 @@
-package com.yupi.project.model.emtity.enums;
+package com.yupi.project.model.enums;
 
 import java.util.Arrays;
 import java.util.List;

@@ -9,16 +9,16 @@ import java.util.stream.Collectors;
  *
  * @author yupi
  */
-public enum InterfaceIntoStatusEnum {
+public enum InterfaceInfoStatusEnum {
 
-    OFFLINE("下线", 0),
+    OFFLINE("关闭", 0),
     ONLINE("上线", 1);
 
     private final String text;
 
     private final int value;
 
-    InterfaceIntoStatusEnum(String text, int value) {
+    InterfaceInfoStatusEnum(String text, int value) {
         this.text = text;
         this.value = value;
     }

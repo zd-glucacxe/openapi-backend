@@ -1,4 +1,4 @@
-package com.yupi.project.model.emtity.vo;
+package com.yupi.project.model.vo;
 
 import lombok.Data;
 

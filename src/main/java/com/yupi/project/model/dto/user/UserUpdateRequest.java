@@ -1,4 +1,4 @@
-package com.yupi.project.model.emtity.dto.user;
+package com.yupi.project.model.dto.user;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;

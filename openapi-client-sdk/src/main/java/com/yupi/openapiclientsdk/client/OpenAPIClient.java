@@ -12,9 +12,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
 import static com.yupi.openapiclientsdk.utils.SignUtil.genSign;
+
 
 /**
  *  调用第三方接口的客户端

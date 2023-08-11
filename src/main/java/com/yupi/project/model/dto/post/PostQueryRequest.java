@@ -1,4 +1,4 @@
-package com.yupi.project.model.emtity.dto.post;
+package com.yupi.project.model.dto.post;
 
 import com.yupi.project.common.PageRequest;
 import lombok.Data;

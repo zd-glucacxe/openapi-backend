@@ -1,16 +1,13 @@
 package com.yupi.project.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 接口信息
+ * 用户调用接口关系
  * @TableName user_interface_info
  */
 @TableName(value ="user_interface_info")
@@ -23,12 +20,12 @@ public class UserInterfaceInfo implements Serializable {
     private Long id;
 
     /**
-     * 调用用户id
+     * 调用用户 id
      */
     private Long userId;
 
     /**
-     * 接口id
+     * 接口 id
      */
     private Long interfaceInfoId;
 
@@ -60,6 +57,7 @@ public class UserInterfaceInfo implements Serializable {
     /**
      * 是否删除(0-未删, 1-已删)
      */
+    @TableLogic
     private Integer isDelete;
 
     @TableField(exist = false)
