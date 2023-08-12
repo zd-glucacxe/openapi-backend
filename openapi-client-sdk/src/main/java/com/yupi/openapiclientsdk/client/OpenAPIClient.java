@@ -86,4 +86,26 @@ public class OpenAPIClient {
         System.out.println(result);
         return result;
     }
+
+    public String getAvatarUrlByPost(){
+
+        HttpResponse httpResponse = HttpRequest.get(GATEWAT_HOST + "/api/avatar/avatarUrl")
+                .addHeaders(getHeaderMap(""))
+                .execute();
+        System.out.println(httpResponse.getStatus());
+        String body = httpResponse.body();
+        System.out.println(body);
+        return body;
+    }
+
+    public String onlineInvoke(String parameters,String url) {
+        HttpResponse httpResponse = HttpRequest.post(GATEWAT_HOST + url)
+                .addHeaders(getHeaderMap(parameters))
+                .body(parameters)
+                .execute();
+        System.out.println(httpResponse.getStatus());
+        String result = httpResponse.body();
+        return result;
+    }
+
 }

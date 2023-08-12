@@ -1,4 +1,4 @@
-package com.yupi.project.model;
+package com.yupi.project.model.vo;
 
 import com.yupi.openapicommon.model.entity.InterfaceInfo;
 import com.yupi.project.model.entity.Post;

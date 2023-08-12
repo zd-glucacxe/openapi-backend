@@ -10,6 +10,7 @@ import com.yupi.openapicommon.service.InnerUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.reactivestreams.Publisher;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -38,7 +39,7 @@ import java.util.List;
 public class CustomGlobalFilter implements GlobalFilter, Ordered {
         private static final List<String> IP_WHITE_LIST = Arrays.asList("127.0.0.1");
 
-        private static final String INTERFACE_HOST = "http://localhost:8123";
+    private static final String INTERFACE_HOST = "http://localhost:8090";
 
         @DubboReference
         private InnerInterfaceInfoService innerInterfaceInfoService;
@@ -58,7 +59,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
 
         //1. 记录请求日志
         ServerHttpRequest request = exchange.getRequest();
-        String path = INTERFACE_HOST + request.getPath().value();
+        String path =  request.getPath().value();
         String method = request.getMethod().toString();
 
 

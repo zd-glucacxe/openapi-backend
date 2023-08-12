@@ -274,7 +274,7 @@ public class InterfaceInfoController {
      */
     @PostMapping("/invoke")
     public BaseResponse<Object> invokeInterfaceInfo(@RequestBody InterfaceInfoInvokeRequest interfaceInfoInvokeRequest,
-                                                     HttpServletRequest request) {
+                                                    HttpServletRequest request) {
         if (interfaceInfoInvokeRequest == null || interfaceInfoInvokeRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -293,9 +293,19 @@ public class InterfaceInfoController {
         String secretKey = loginUser.getSecretKey();
         OpenAPIClient tempClient = new OpenAPIClient(accessKey, secretKey);
         Gson gson = new Gson();
-        com.yupi.openapiclientsdk.model.User user = gson.fromJson(userRequestParams, com.yupi.openapiclientsdk.model.User.class);
-        String usernameByPost = tempClient.getUsernameByPost(user);
-        return ResultUtils.success(usernameByPost);
+
+        String invokeResult = "";
+        if (id == 1) {
+            com.yupi.openapiclientsdk.model.User user = gson.fromJson(userRequestParams, com.yupi.openapiclientsdk.model.User.class);
+            invokeResult = tempClient.getUsernameByPost(user);
+        }
+        if (id == 2) {
+            invokeResult = tempClient.getAvatarUrlByPost();
+        }
+        if (id > 2) {
+            invokeResult = tempClient.onlineInvoke(userRequestParams, oldInterfaceInfo.getUrl());
+        }
+        return ResultUtils.success(invokeResult);
     }
 
 }
