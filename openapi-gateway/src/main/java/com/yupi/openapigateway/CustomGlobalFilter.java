@@ -9,6 +9,7 @@ import com.yupi.openapicommon.service.InnerUserInterfaceInfoService;
 import com.yupi.openapicommon.service.InnerUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.http.util.CharsetUtils;
 import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -26,9 +27,14 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.http.server.reactive.ServerHttpResponseDecorator;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
+import java.util.Optional;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,6 +63,10 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
 
+
+
+
+
         //1. 记录请求日志
         ServerHttpRequest request = exchange.getRequest();
         String path =  request.getPath().value();
@@ -71,6 +81,10 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         log.info("请求来源地址1：" + request.getLocalAddress().getHostString());
         log.info("请求来源地址2：" + request.getRemoteAddress());
 
+
+
+
+
         ServerHttpResponse response = exchange.getResponse();
         //2. 访问控制 - 黑白名单
         if (!IP_WHITE_LIST.contains(sourceAddress)) {
@@ -80,7 +94,13 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         HttpHeaders headers = request.getHeaders();
         String accessKey = headers.getFirst("accessKey");
         String nonce = headers.getFirst("nonce");
-        String body = headers.getFirst("body");
+//        String body = headers.getFirst("body");
+        String body = null;
+        try {
+            body = URLDecoder.decode(headers.getFirst("body"), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
         String timestamp = headers.getFirst("timestamp");
         String sign = headers.getFirst("sign");
 
@@ -110,6 +130,8 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         if ((currentTime - Long.parseLong(timestamp)) >= FIVE_MINUTES) {
              return handleNoAuth(response);
         }
+
+
 
 
         // 实际情况是从数据库中拿到 secretKey，可以通过accessKey去查

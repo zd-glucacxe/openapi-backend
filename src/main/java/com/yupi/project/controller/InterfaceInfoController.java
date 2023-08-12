@@ -302,6 +302,9 @@ public class InterfaceInfoController {
         if (id == 2) {
             invokeResult = tempClient.getAvatarUrlByPost();
         }
+        if (id == 6) {
+            invokeResult = tempClient.getBaiduUrlByPost();
+        }
         if (id > 2) {
             invokeResult = tempClient.onlineInvoke(userRequestParams, oldInterfaceInfo.getUrl());
         }

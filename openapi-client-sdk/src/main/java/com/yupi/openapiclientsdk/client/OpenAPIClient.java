@@ -8,6 +8,8 @@ import cn.hutool.json.JSONUtil;
 import com.yupi.openapiclientsdk.model.User;
 
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,6 +61,15 @@ public class OpenAPIClient {
 
 
     private Map<String, String> getHeaderMap(String body) {
+        if (body == null) {
+            body = "zw";
+        }
+        String encode = null;
+        try {
+            encode = URLEncoder.encode(body, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("accessKey", accessKey);
         /**
@@ -96,6 +107,17 @@ public class OpenAPIClient {
         String body = httpResponse.body();
         System.out.println(body);
         return body;
+    }
+
+
+    public String getBaiduUrlByPost(){
+        HttpResponse httpResponse = HttpRequest.get(GATEWAT_HOST + "/api/baidu/baiduInfo")
+                .addHeaders(getHeaderMap(""))
+                .execute();
+        System.out.println(httpResponse.getStatus());
+        String total = httpResponse.body();
+        System.out.println(total);
+        return total;
     }
 
     public String onlineInvoke(String parameters,String url) {
